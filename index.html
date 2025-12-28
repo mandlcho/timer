@@ -76,6 +76,12 @@
       outline: none;
     }
 
+    .activity-input::placeholder {
+      font-size: 0.75rem;
+      font-style: italic;
+      opacity: 0.5;
+    }
+
     .activity-input:focus {
       border-color: var(--accent);
     }
@@ -383,15 +389,17 @@
     }
 
     .section-content {
-      max-height: 500px;
+      display: grid;
+      grid-template-rows: 1fr;
+      transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .section-inner {
       overflow: hidden;
-      transition: max-height 0.3s ease, opacity 0.3s ease;
-      opacity: 1;
     }
 
     .section-content.collapsed {
-      max-height: 0;
-      opacity: 0;
+      grid-template-rows: 0fr;
     }
 
     /* Calendar styles */
@@ -610,15 +618,17 @@
         <span class="section-arrow">▼</span>
       </div>
       <div class="section-content" id="calendar-content">
-        <div class="calendar-header">
-          <div class="calendar-nav">
-            <button id="prev-month">&lt;</button>
-            <span id="calendar-month" class="calendar-month">December 2024</span>
-            <button id="next-month">&gt;</button>
+        <div class="section-inner">
+          <div class="calendar-header">
+            <div class="calendar-nav">
+              <button id="prev-month">&lt;</button>
+              <span id="calendar-month" class="calendar-month">December 2024</span>
+              <button id="next-month">&gt;</button>
+            </div>
           </div>
+          <div id="calendar-grid" class="calendar-grid"></div>
+          <div id="calendar-legend" class="calendar-legend"></div>
         </div>
-        <div id="calendar-grid" class="calendar-grid"></div>
-        <div id="calendar-legend" class="calendar-legend"></div>
       </div>
     </div>
 
@@ -628,12 +638,14 @@
         <span class="section-arrow">▼</span>
       </div>
       <div class="section-content" id="history-content">
-        <div class="history-header">
-          <span class="history-title"></span>
-          <button id="clear-history" class="history-clear">Clear</button>
-        </div>
-        <div id="history-list" class="history-list">
-          <div class="empty-state">No sessions yet</div>
+        <div class="section-inner">
+          <div class="history-header">
+            <span class="history-title"></span>
+            <button id="clear-history" class="history-clear">Clear</button>
+          </div>
+          <div id="history-list" class="history-list">
+            <div class="empty-state">No sessions yet</div>
+          </div>
         </div>
       </div>
     </div>
