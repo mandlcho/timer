@@ -138,22 +138,22 @@
   function updateUI(state) {
     switch (state) {
       case 'running':
-        startBtn.classList.add('hidden');
-        stopBtn.classList.remove('hidden');
+        startBtn.disabled = true;
+        stopBtn.disabled = false;
         resetBtn.classList.add('hidden');
         timePresets.classList.add('hidden');
         activityInput.disabled = true;
         break;
       case 'stopped':
-        startBtn.classList.remove('hidden');
-        stopBtn.classList.add('hidden');
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
         resetBtn.classList.remove('hidden');
         timePresets.classList.remove('hidden');
         activityInput.disabled = false;
         break;
       case 'ready':
-        startBtn.classList.remove('hidden');
-        stopBtn.classList.add('hidden');
+        startBtn.disabled = false;
+        stopBtn.disabled = true;
         resetBtn.classList.add('hidden');
         timePresets.classList.remove('hidden');
         activityInput.disabled = false;
