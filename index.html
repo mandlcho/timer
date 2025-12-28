@@ -60,7 +60,6 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      gap: 1.5rem;
     }
 
     .activity-input {
@@ -85,12 +84,26 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      width: 400px;
+      height: 400px;
+    }
+
+    .timer-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      width: 260px;
+      height: 260px;
     }
 
     .timer-ring {
       position: absolute;
-      width: 220px;
-      height: 220px;
+      width: 400px;
+      height: 400px;
       transform: rotate(-90deg);
     }
 
@@ -109,12 +122,10 @@
     }
 
     .time-display {
-      font-size: 4rem;
+      font-size: 3.5rem;
       font-weight: 200;
       letter-spacing: 0.1em;
       font-variant-numeric: tabular-nums;
-      position: relative;
-      z-index: 1;
     }
 
     .time-input-group {
@@ -153,8 +164,8 @@
       background: transparent;
       border: 1px solid var(--fg);
       color: var(--fg);
-      padding: 0.75rem 2rem;
-      font-size: 1rem;
+      padding: 0.5rem 1.5rem;
+      font-size: 0.9rem;
       cursor: pointer;
       border-radius: 4px;
       transition: all 0.2s;
@@ -447,33 +458,32 @@
   <button id="theme-toggle" class="theme-toggle" title="Toggle theme">◐</button>
   <div class="container">
     <div class="timer-section">
-      <input
-        type="text"
-        id="activity"
-        class="activity-input"
-        placeholder="What are you focusing on?"
-        maxlength="50"
-      >
-
       <div class="timer-ring-container">
         <svg class="timer-ring" viewBox="0 0 220 220">
           <circle class="timer-ring-bg" cx="110" cy="110" r="100"></circle>
           <circle id="timer-ring-progress" class="timer-ring-progress" cx="110" cy="110" r="100"></circle>
         </svg>
-        <div id="time-display" class="time-display">25:00</div>
-      </div>
-
-      <div id="time-setup" class="time-input-group">
-        <input type="number" id="minutes" class="time-input" value="25" min="1" max="180">
-        <span class="time-label">min</span>
-        <input type="number" id="seconds" class="time-input" value="0" min="0" max="59">
-        <span class="time-label">sec</span>
-      </div>
-
-      <div class="controls">
-        <button id="start-btn" class="primary">Start</button>
-        <button id="stop-btn" class="danger hidden">Stop</button>
-        <button id="reset-btn" class="hidden">Reset</button>
+        <div class="timer-content">
+          <input
+            type="text"
+            id="activity"
+            class="activity-input"
+            placeholder="What are you focusing on?"
+            maxlength="50"
+          >
+          <div id="time-display" class="time-display">25:00</div>
+          <div id="time-setup" class="time-input-group">
+            <input type="number" id="minutes" class="time-input" value="25" min="1" max="180">
+            <span class="time-label">min</span>
+            <input type="number" id="seconds" class="time-input" value="0" min="0" max="59">
+            <span class="time-label">sec</span>
+          </div>
+          <div class="controls">
+            <button id="start-btn" class="primary">Start</button>
+            <button id="stop-btn" class="danger hidden">Stop</button>
+            <button id="reset-btn" class="hidden">Reset</button>
+          </div>
+        </div>
       </div>
     </div>
 
