@@ -37,6 +37,11 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      transition: background 0.4s ease, color 0.4s ease;
+    }
+
+    *, *::before, *::after {
+      transition: background-color 0.4s ease, border-color 0.4s ease, color 0.4s ease, opacity 0.4s ease;
     }
 
     .container {
@@ -75,11 +80,41 @@
       border-color: var(--accent);
     }
 
+    .timer-ring-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .timer-ring {
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      transform: rotate(-90deg);
+    }
+
+    .timer-ring-bg {
+      fill: none;
+      stroke: var(--border);
+      stroke-width: 3;
+    }
+
+    .timer-ring-progress {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 3;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.3s ease;
+    }
+
     .time-display {
       font-size: 4rem;
       font-weight: 200;
       letter-spacing: 0.1em;
       font-variant-numeric: tabular-nums;
+      position: relative;
+      z-index: 1;
     }
 
     .time-input-group {
@@ -420,7 +455,13 @@
         maxlength="50"
       >
 
-      <div id="time-display" class="time-display">25:00</div>
+      <div class="timer-ring-container">
+        <svg class="timer-ring" viewBox="0 0 220 220">
+          <circle class="timer-ring-bg" cx="110" cy="110" r="100"></circle>
+          <circle id="timer-ring-progress" class="timer-ring-progress" cx="110" cy="110" r="100"></circle>
+        </svg>
+        <div id="time-display" class="time-display">25:00</div>
+      </div>
 
       <div id="time-setup" class="time-input-group">
         <input type="number" id="minutes" class="time-input" value="25" min="1" max="180">

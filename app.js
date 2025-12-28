@@ -26,6 +26,22 @@
   // Theme toggle
   const themeToggle = document.getElementById('theme-toggle');
 
+  // Timer ring
+  const timerRingProgress = document.getElementById('timer-ring-progress');
+  const ringCircumference = 2 * Math.PI * 100; // r=100
+
+  function updateRing(remaining, duration) {
+    const progress = remaining / duration;
+    const offset = ringCircumference * (1 - progress);
+    timerRingProgress.style.strokeDasharray = ringCircumference;
+    timerRingProgress.style.strokeDashoffset = offset;
+  }
+
+  function resetRing() {
+    timerRingProgress.style.strokeDasharray = ringCircumference;
+    timerRingProgress.style.strokeDashoffset = 0;
+  }
+
   // Calendar state
   let currentDate = new Date();
   let selectedDate = null;
@@ -101,6 +117,7 @@
     activity: 'Focus',
     onTick: (remaining) => {
       timeDisplay.textContent = Timer.formatTime(remaining);
+      updateRing(remaining, timer.duration);
     },
     onComplete: (entry) => {
       playDing();
@@ -367,6 +384,7 @@
     const activity = activityInput.value.trim() || 'Focus';
     timer.setActivity(activity);
     timer.remaining = timer.duration;
+    resetRing();
     timer.start();
     updateUI('running');
   });
@@ -378,6 +396,7 @@
 
   resetBtn.addEventListener('click', () => {
     timer.reset();
+    resetRing();
     updateDisplayFromInputs();
     updateUI('ready');
   });
@@ -448,6 +467,7 @@
 
   // Initialize
   setTheme(getTheme());
+  resetRing();
   updateDisplayFromInputs();
   renderHistory();
   renderCalendar();
