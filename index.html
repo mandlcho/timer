@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1a1a1a">
+  <title>Focus Timer</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #1a1a1a;
+      --fg: #e0e0e0;
+      --muted: #666;
+      --accent: #4a9eff;
+      --danger: #ff6b6b;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Mono', 'Menlo', monospace;
+      background: var(--bg);
+      color: var(--fg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+      width: 100%;
+    }
+
+    .timer-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .activity-input {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--muted);
+      color: var(--fg);
+      font-size: 1rem;
+      text-align: center;
+      padding: 0.5rem;
+      width: 100%;
+      max-width: 200px;
+      outline: none;
+    }
+
+    .activity-input:focus {
+      border-color: var(--accent);
+    }
+
+    .time-display {
+      font-size: 4rem;
+      font-weight: 200;
+      letter-spacing: 0.1em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .time-input-group {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .time-input {
+      background: transparent;
+      border: 1px solid var(--muted);
+      border-radius: 4px;
+      color: var(--fg);
+      font-size: 1rem;
+      padding: 0.5rem;
+      width: 60px;
+      text-align: center;
+      outline: none;
+    }
+
+    .time-input:focus {
+      border-color: var(--accent);
+    }
+
+    .time-label {
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .controls {
+      display: flex;
+      gap: 1rem;
+    }
+
+    button {
+      background: transparent;
+      border: 1px solid var(--fg);
+      color: var(--fg);
+      padding: 0.75rem 2rem;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    button:hover {
+      background: var(--fg);
+      color: var(--bg);
+    }
+
+    button:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    button.primary {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    button.primary:hover {
+      background: var(--accent);
+      color: var(--bg);
+    }
+
+    button.danger {
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+
+    button.danger:hover {
+      background: var(--danger);
+      color: var(--bg);
+    }
+
+    .history-section {
+      border-top: 1px solid var(--muted);
+      padding-top: 1rem;
+      margin-top: 1rem;
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .history-title {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .history-clear {
+      font-size: 0.7rem;
+      background: none;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 0.25rem;
+    }
+
+    .history-clear:hover {
+      color: var(--danger);
+    }
+
+    .history-list {
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #333;
+      font-size: 0.85rem;
+    }
+
+    .history-activity {
+      color: var(--fg);
+    }
+
+    .history-meta {
+      color: var(--muted);
+      text-align: right;
+    }
+
+    .history-status {
+      font-size: 0.7rem;
+    }
+
+    .history-status.completed {
+      color: #4ade80;
+    }
+
+    .history-status.stopped {
+      color: var(--muted);
+    }
+
+    .empty-state {
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-align: center;
+      padding: 1rem 0;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 400px) {
+      .time-display {
+        font-size: 3rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="timer-section">
+      <input
+        type="text"
+        id="activity"
+        class="activity-input"
+        placeholder="What are you focusing on?"
+        maxlength="50"
+      >
+
+      <div id="time-display" class="time-display">25:00</div>
+
+      <div id="time-setup" class="time-input-group">
+        <input type="number" id="minutes" class="time-input" value="25" min="1" max="180">
+        <span class="time-label">min</span>
+        <input type="number" id="seconds" class="time-input" value="0" min="0" max="59">
+        <span class="time-label">sec</span>
+      </div>
+
+      <div class="controls">
+        <button id="start-btn" class="primary">Start</button>
+        <button id="stop-btn" class="danger hidden">Stop</button>
+        <button id="reset-btn" class="hidden">Reset</button>
+      </div>
+    </div>
+
+    <div class="history-section">
+      <div class="history-header">
+        <span class="history-title">History</span>
+        <button id="clear-history" class="history-clear">Clear</button>
+      </div>
+      <div id="history-list" class="history-list">
+        <div class="empty-state">No sessions yet</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="timer-core.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
