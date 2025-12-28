@@ -18,6 +18,16 @@
       --muted: #666;
       --accent: #4a9eff;
       --danger: #ff6b6b;
+      --border: #333;
+    }
+
+    [data-theme="light"] {
+      --bg: #fafafa;
+      --fg: #1a1a1a;
+      --muted: #888;
+      --accent: #2563eb;
+      --danger: #dc2626;
+      --border: #ddd;
     }
 
     body {
@@ -188,7 +198,7 @@
       display: flex;
       justify-content: space-between;
       padding: 0.5rem 0;
-      border-bottom: 1px solid #333;
+      border-bottom: 1px solid var(--border);
       font-size: 0.85rem;
     }
 
@@ -224,6 +234,173 @@
       display: none;
     }
 
+    /* Calendar styles */
+    .calendar-section {
+      border-top: 1px solid var(--muted);
+      padding-top: 1rem;
+      margin-top: 1rem;
+    }
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .calendar-nav {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .calendar-nav button {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.9rem;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+    }
+
+    .calendar-nav button:hover {
+      color: var(--fg);
+      background: transparent;
+    }
+
+    .calendar-month {
+      font-size: 0.85rem;
+      color: var(--fg);
+      min-width: 120px;
+      text-align: center;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+    }
+
+    .calendar-weekday {
+      font-size: 0.65rem;
+      color: var(--muted);
+      text-align: center;
+      padding: 0.25rem;
+      text-transform: uppercase;
+    }
+
+    .calendar-day {
+      aspect-ratio: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      color: var(--muted);
+      cursor: pointer;
+      border-radius: 4px;
+      position: relative;
+      gap: 2px;
+    }
+
+    .calendar-day:hover {
+      background: var(--border);
+    }
+
+    .calendar-day.other-month {
+      opacity: 0.3;
+    }
+
+    .calendar-day.today {
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    .calendar-day.selected {
+      background: var(--border);
+      outline: 1px solid var(--accent);
+    }
+
+    .calendar-day.has-activity {
+      color: var(--fg);
+    }
+
+    .day-number {
+      line-height: 1;
+    }
+
+    .day-dots {
+      display: flex;
+      gap: 2px;
+      height: 6px;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 100%;
+    }
+
+    .activity-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+    }
+
+    .calendar-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      padding-top: 0.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .selected-date-label {
+      font-size: 0.75rem;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+
+    .clear-filter {
+      font-size: 0.7rem;
+      color: var(--muted);
+      cursor: pointer;
+      margin-left: 0.5rem;
+    }
+
+    .clear-filter:hover {
+      color: var(--fg);
+    }
+
+    .theme-toggle {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      line-height: 1;
+    }
+
+    .theme-toggle:hover {
+      color: var(--fg);
+      background: none;
+    }
+
     @media (max-width: 400px) {
       .time-display {
         font-size: 3rem;
@@ -232,6 +409,7 @@
   </style>
 </head>
 <body>
+  <button id="theme-toggle" class="theme-toggle" title="Toggle theme">◐</button>
   <div class="container">
     <div class="timer-section">
       <input
@@ -256,6 +434,18 @@
         <button id="stop-btn" class="danger hidden">Stop</button>
         <button id="reset-btn" class="hidden">Reset</button>
       </div>
+    </div>
+
+    <div class="calendar-section">
+      <div class="calendar-header">
+        <div class="calendar-nav">
+          <button id="prev-month">&lt;</button>
+          <span id="calendar-month" class="calendar-month">December 2024</span>
+          <button id="next-month">&gt;</button>
+        </div>
+      </div>
+      <div id="calendar-grid" class="calendar-grid"></div>
+      <div id="calendar-legend" class="calendar-legend"></div>
     </div>
 
     <div class="history-section">
