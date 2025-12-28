@@ -555,6 +555,21 @@
     setTheme(current === 'dark' ? 'light' : 'dark');
   });
 
+  // Collapsible sections
+  function setupCollapsible(toggleId, contentId) {
+    const toggle = document.getElementById(toggleId);
+    const content = document.getElementById(contentId);
+    const arrow = toggle.querySelector('.section-arrow');
+
+    toggle.addEventListener('click', () => {
+      const isCollapsed = content.classList.toggle('collapsed');
+      arrow.textContent = isCollapsed ? '▶' : '▼';
+    });
+  }
+
+  setupCollapsible('calendar-toggle', 'calendar-content');
+  setupCollapsible('history-toggle', 'history-content');
+
   // Initialize
   setTheme(getTheme());
   resetRing();

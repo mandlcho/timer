@@ -354,10 +354,50 @@
       pointer-events: none;
     }
 
+    /* Collapsible sections */
+    .section-toggle {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      padding: 0.5rem 0;
+      user-select: none;
+    }
+
+    .section-toggle:hover .section-title {
+      color: var(--fg);
+    }
+
+    .section-title {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      transition: color 0.2s;
+    }
+
+    .section-arrow {
+      color: var(--muted);
+      font-size: 0.7rem;
+      transition: transform 0.2s;
+    }
+
+    .section-content {
+      max-height: 500px;
+      overflow: hidden;
+      transition: max-height 0.3s ease, opacity 0.3s ease;
+      opacity: 1;
+    }
+
+    .section-content.collapsed {
+      max-height: 0;
+      opacity: 0;
+    }
+
     /* Calendar styles */
     .calendar-section {
       border-top: 1px solid var(--muted);
-      padding-top: 1rem;
+      padding-top: 0.5rem;
       margin-top: 1rem;
     }
 
@@ -565,24 +605,36 @@
     </div>
 
     <div class="calendar-section">
-      <div class="calendar-header">
-        <div class="calendar-nav">
-          <button id="prev-month">&lt;</button>
-          <span id="calendar-month" class="calendar-month">December 2024</span>
-          <button id="next-month">&gt;</button>
-        </div>
+      <div class="section-toggle" id="calendar-toggle">
+        <span class="section-title">Calendar</span>
+        <span class="section-arrow">▼</span>
       </div>
-      <div id="calendar-grid" class="calendar-grid"></div>
-      <div id="calendar-legend" class="calendar-legend"></div>
+      <div class="section-content" id="calendar-content">
+        <div class="calendar-header">
+          <div class="calendar-nav">
+            <button id="prev-month">&lt;</button>
+            <span id="calendar-month" class="calendar-month">December 2024</span>
+            <button id="next-month">&gt;</button>
+          </div>
+        </div>
+        <div id="calendar-grid" class="calendar-grid"></div>
+        <div id="calendar-legend" class="calendar-legend"></div>
+      </div>
     </div>
 
     <div class="history-section">
-      <div class="history-header">
-        <span class="history-title">History</span>
-        <button id="clear-history" class="history-clear">Clear</button>
+      <div class="section-toggle" id="history-toggle">
+        <span class="section-title">History</span>
+        <span class="section-arrow">▼</span>
       </div>
-      <div id="history-list" class="history-list">
-        <div class="empty-state">No sessions yet</div>
+      <div class="section-content" id="history-content">
+        <div class="history-header">
+          <span class="history-title"></span>
+          <button id="clear-history" class="history-clear">Clear</button>
+        </div>
+        <div id="history-list" class="history-list">
+          <div class="empty-state">No sessions yet</div>
+        </div>
       </div>
     </div>
   </div>
