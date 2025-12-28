@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#1a1a1a">
+  <link id="favicon" rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⏱️</text></svg>">
   <title>Focus Timer</title>
   <style>
     * {
@@ -111,14 +112,16 @@
       fill: none;
       stroke: var(--border);
       stroke-width: 3;
+      stroke-dasharray: 0 1.667;
+      stroke-linecap: round;
     }
 
     .timer-ring-progress {
       fill: none;
       stroke: var(--accent);
       stroke-width: 3;
+      stroke-dasharray: 0 1.667;
       stroke-linecap: round;
-      transition: stroke-dashoffset 0.3s ease;
     }
 
     .time-display {
@@ -509,8 +512,8 @@
     <div class="timer-section">
       <div class="timer-ring-container">
         <svg class="timer-ring" viewBox="0 0 220 220">
-          <circle class="timer-ring-bg" cx="110" cy="110" r="100"></circle>
-          <circle id="timer-ring-progress" class="timer-ring-progress" cx="110" cy="110" r="100"></circle>
+          <circle class="timer-ring-bg" cx="110" cy="110" r="100" pathLength="100"></circle>
+          <circle id="timer-ring-progress" class="timer-ring-progress" cx="110" cy="110" r="100" pathLength="100"></circle>
         </svg>
         <div class="timer-content">
           <input

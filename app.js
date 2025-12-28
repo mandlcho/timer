@@ -27,20 +27,20 @@
   // Theme toggle
   const themeToggle = document.getElementById('theme-toggle');
 
-  // Timer ring
+  // Timer ring - uses CSS mask with conic-gradient for progress
   const timerRingProgress = document.getElementById('timer-ring-progress');
-  const ringCircumference = 2 * Math.PI * 100; // r=100
 
   function updateRing(remaining, duration) {
     const progress = remaining / duration;
-    const offset = ringCircumference * (1 - progress);
-    timerRingProgress.style.strokeDasharray = ringCircumference;
-    timerRingProgress.style.strokeDashoffset = offset;
+    const angle = progress * 360;
+    // Conic gradient mask: visible up to angle, then transparent
+    timerRingProgress.style.mask = `conic-gradient(from 0deg, black ${angle}deg, transparent ${angle}deg)`;
+    timerRingProgress.style.webkitMask = `conic-gradient(from 0deg, black ${angle}deg, transparent ${angle}deg)`;
   }
 
   function resetRing() {
-    timerRingProgress.style.strokeDasharray = ringCircumference;
-    timerRingProgress.style.strokeDashoffset = 0;
+    timerRingProgress.style.mask = 'none';
+    timerRingProgress.style.webkitMask = 'none';
   }
 
   // Calendar state
@@ -119,6 +119,7 @@
     onTick: (remaining) => {
       timeDisplay.textContent = Timer.formatTime(remaining);
       updateRing(remaining, timer.duration);
+      document.title = `⏱️ ${Timer.formatTime(remaining)}`;
     },
     onComplete: (entry) => {
       playDing();
@@ -126,12 +127,14 @@
       updateUI('stopped');
       renderHistory();
       renderCalendar();
+      document.title = 'Focus Timer';
     },
     onStop: (entry) => {
       playDing();
       historyManager.add(entry);
       renderHistory();
       renderCalendar();
+      document.title = 'Focus Timer';
     }
   });
 
