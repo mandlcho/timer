@@ -268,7 +268,7 @@
         }
       }, 0);
     } else {
-      historyTitle.textContent = 'History';
+      historyTitle.textContent = '';
     }
 
     if (displayHistory.length === 0) {
