@@ -172,13 +172,15 @@
   }
 
   function renderHistory() {
-    let history = historyManager.getAll();
+    const allHistory = historyManager.getAll();
 
-    // Filter by selected date if any
+    // Filter by selected date if any, keeping track of original indices
     let dateLabel = '';
+    let displayHistory = allHistory.map((entry, index) => ({ entry, originalIndex: index }));
+
     if (selectedDate) {
       const selectedKey = getDateKey(selectedDate);
-      history = history.filter(entry => entry.timestamp.split('T')[0] === selectedKey);
+      displayHistory = displayHistory.filter(item => item.entry.timestamp.split('T')[0] === selectedKey);
       dateLabel = selectedDate.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
     }
 
@@ -202,13 +204,13 @@
       historyTitle.textContent = 'History';
     }
 
-    if (history.length === 0) {
+    if (displayHistory.length === 0) {
       const msg = selectedDate ? 'No sessions on this day' : 'No sessions yet';
       historyList.innerHTML = `<div class="empty-state">${msg}</div>`;
       return;
     }
 
-    historyList.innerHTML = history.slice(0, 20).map(entry => {
+    historyList.innerHTML = displayHistory.slice(0, 20).map(({ entry, originalIndex }) => {
       const date = new Date(entry.timestamp);
       const timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       const dateStr = date.toLocaleDateString([], { month: 'short', day: 'numeric' });
@@ -218,7 +220,7 @@
       const color = getActivityColor(entry.activity);
 
       return `
-        <div class="history-item">
+        <div class="history-item" data-index="${originalIndex}">
           <span class="history-activity">
             <span class="activity-dot" style="background: ${color}; display: inline-block; margin-right: 6px;"></span>
             ${escapeHtml(entry.activity)}
@@ -227,9 +229,22 @@
             <span class="history-status ${status}">${statusLabel}</span>
             <br>${selectedDate ? timeStr : dateStr + ' ' + timeStr}
           </span>
+          <button class="history-delete" title="Delete">✕</button>
         </div>
       `;
     }).join('');
+
+    // Add delete handlers
+    historyList.querySelectorAll('.history-delete').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const item = btn.closest('.history-item');
+        const index = parseInt(item.dataset.index, 10);
+        historyManager.delete(index);
+        renderHistory();
+        renderCalendar();
+      });
+    });
   }
 
   function getDateKey(date) {

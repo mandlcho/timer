@@ -136,6 +136,17 @@ class HistoryManager {
     return history;
   }
 
+  delete(index) {
+    const history = this.getAll();
+    if (index >= 0 && index < history.length) {
+      history.splice(index, 1);
+      if (this.storage) {
+        this.storage.setItem(this.key, JSON.stringify(history));
+      }
+    }
+    return history;
+  }
+
   clear() {
     if (this.storage) {
       this.storage.removeItem(this.key);

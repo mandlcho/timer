@@ -122,9 +122,9 @@
     }
 
     .time-display {
-      font-size: 3.5rem;
+      font-size: 4.5rem;
       font-weight: 200;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.05em;
       font-variant-numeric: tabular-nums;
     }
 
@@ -157,7 +157,29 @@
 
     .controls {
       display: flex;
-      gap: 1rem;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .controls-main {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .reset-link {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 0.75rem;
+      cursor: pointer;
+      padding: 0.25rem;
+      text-decoration: underline;
+    }
+
+    .reset-link:hover {
+      color: var(--fg);
+      background: none;
     }
 
     button {
@@ -243,18 +265,41 @@
     .history-item {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       padding: 0.5rem 0;
       border-bottom: 1px solid var(--border);
       font-size: 0.85rem;
+      gap: 0.5rem;
     }
 
     .history-activity {
       color: var(--fg);
+      flex: 1;
     }
 
     .history-meta {
       color: var(--muted);
       text-align: right;
+    }
+
+    .history-delete {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 0.75rem;
+      cursor: pointer;
+      padding: 0.25rem;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .history-item:hover .history-delete {
+      opacity: 1;
+    }
+
+    .history-delete:hover {
+      color: var(--danger);
+      background: none;
     }
 
     .history-status {
@@ -277,7 +322,8 @@
     }
 
     .hidden {
-      display: none;
+      visibility: hidden;
+      pointer-events: none;
     }
 
     /* Calendar styles */
@@ -289,7 +335,7 @@
 
     .calendar-header {
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
       margin-bottom: 0.75rem;
     }
@@ -479,9 +525,11 @@
             <span class="time-label">sec</span>
           </div>
           <div class="controls">
-            <button id="start-btn" class="primary">Start</button>
-            <button id="stop-btn" class="danger hidden">Stop</button>
-            <button id="reset-btn" class="hidden">Reset</button>
+            <div class="controls-main">
+              <button id="start-btn" class="primary">Start</button>
+              <button id="stop-btn" class="danger hidden">Stop</button>
+            </div>
+            <button id="reset-btn" class="reset-link hidden">reset</button>
           </div>
         </div>
       </div>
