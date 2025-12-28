@@ -7,14 +7,15 @@
   // DOM Elements
   const activityInput = document.getElementById('activity');
   const timeDisplay = document.getElementById('time-display');
-  const timeSetup = document.getElementById('time-setup');
-  const minutesInput = document.getElementById('minutes');
-  const secondsInput = document.getElementById('seconds');
+  const timePresets = document.getElementById('time-presets');
   const startBtn = document.getElementById('start-btn');
   const stopBtn = document.getElementById('stop-btn');
   const resetBtn = document.getElementById('reset-btn');
   const historyList = document.getElementById('history-list');
   const clearHistoryBtn = document.getElementById('clear-history');
+
+  // Selected duration in seconds
+  let selectedDuration = 25 * 60;
 
   // Calendar DOM Elements
   const calendarGrid = document.getElementById('calendar-grid');
@@ -140,35 +141,41 @@
         startBtn.classList.add('hidden');
         stopBtn.classList.remove('hidden');
         resetBtn.classList.add('hidden');
-        timeSetup.classList.add('hidden');
+        timePresets.classList.add('hidden');
         activityInput.disabled = true;
         break;
       case 'stopped':
         startBtn.classList.remove('hidden');
         stopBtn.classList.add('hidden');
         resetBtn.classList.remove('hidden');
-        timeSetup.classList.remove('hidden');
+        timePresets.classList.remove('hidden');
         activityInput.disabled = false;
         break;
       case 'ready':
         startBtn.classList.remove('hidden');
         stopBtn.classList.add('hidden');
         resetBtn.classList.add('hidden');
-        timeSetup.classList.remove('hidden');
+        timePresets.classList.remove('hidden');
         activityInput.disabled = false;
         break;
     }
   }
 
   function getDuration() {
-    const mins = parseInt(minutesInput.value, 10) || 0;
-    const secs = parseInt(secondsInput.value, 10) || 0;
-    return mins * 60 + secs;
+    return selectedDuration;
   }
 
-  function updateDisplayFromInputs() {
-    const duration = getDuration();
-    timeDisplay.textContent = Timer.formatTime(duration);
+  function updateDisplay() {
+    timeDisplay.textContent = Timer.formatTime(selectedDuration);
+  }
+
+  function selectPreset(minutes) {
+    selectedDuration = minutes * 60;
+    updateDisplay();
+    // Update active state
+    timePresets.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.classList.toggle('active', parseInt(btn.dataset.minutes) === minutes);
+    });
   }
 
   function renderHistory() {
@@ -412,12 +419,17 @@
   resetBtn.addEventListener('click', () => {
     timer.reset();
     resetRing();
-    updateDisplayFromInputs();
+    updateDisplay();
     updateUI('ready');
   });
 
-  minutesInput.addEventListener('input', updateDisplayFromInputs);
-  secondsInput.addEventListener('input', updateDisplayFromInputs);
+  // Preset button handlers
+  timePresets.querySelectorAll('.preset-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const minutes = parseInt(btn.dataset.minutes, 10);
+      selectPreset(minutes);
+    });
+  });
 
   clearHistoryBtn.addEventListener('click', () => {
     if (confirm('Clear all history?')) {
@@ -483,7 +495,7 @@
   // Initialize
   setTheme(getTheme());
   resetRing();
-  updateDisplayFromInputs();
+  updateDisplay();
   renderHistory();
   renderCalendar();
 
