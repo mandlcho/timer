@@ -5,6 +5,7 @@ import { render, Box, Text, useInput, useApp } from 'ink';
 import TextInput from 'ink-text-input';
 import chalk from 'chalk';
 import { Timer } from './timer.ts';
+import { AsciiAnimation } from './AsciiAnimation.tsx';
 
 // Format time as MM:SS
 const formatTime = (seconds) => {
@@ -30,6 +31,9 @@ const Preset = ({ minutes, isActive, onSelect }) => {
 // Main App component
 const App = () => {
   const { exit } = useApp();
+
+  // Animation state
+  const [showAnimation, setShowAnimation] = useState(true);
 
   // State
   const [activity, setActivity] = useState('');
@@ -149,6 +153,11 @@ const App = () => {
   });
 
   const progress = remaining / duration;
+
+  // Show animation on startup
+  if (showAnimation) {
+    return <AsciiAnimation onComplete={() => setShowAnimation(false)} duration={2000} />;
+  }
 
   return (
     <Box flexDirection="column" padding={1}>
