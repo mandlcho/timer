@@ -181,6 +181,63 @@
     });
   }
 
+  function clearPresetSelection() {
+    timePresets.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.classList.remove('active');
+    });
+  }
+
+  function enterEditMode() {
+    const currentTime = Timer.formatTime(selectedDuration);
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'time-edit';
+    input.value = currentTime;
+    input.placeholder = 'mm:ss';
+
+    timeDisplay.replaceWith(input);
+    input.focus();
+    input.select();
+
+    function exitEditMode() {
+      const value = input.value.trim();
+      let seconds = 0;
+
+      // Parse mm:ss or just minutes
+      if (value.includes(':')) {
+        const parts = value.split(':');
+        seconds = (parseInt(parts[0], 10) || 0) * 60 + (parseInt(parts[1], 10) || 0);
+      } else {
+        seconds = (parseInt(value, 10) || 0) * 60;
+      }
+
+      if (seconds > 0) {
+        selectedDuration = seconds;
+        clearPresetSelection();
+      }
+
+      // Restore display
+      const newDisplay = document.createElement('div');
+      newDisplay.id = 'time-display';
+      newDisplay.className = 'time-display';
+      newDisplay.textContent = Timer.formatTime(selectedDuration);
+      input.replaceWith(newDisplay);
+
+      // Re-attach click handler
+      newDisplay.addEventListener('click', enterEditMode);
+    }
+
+    input.addEventListener('blur', exitEditMode);
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        input.blur();
+      } else if (e.key === 'Escape') {
+        input.value = Timer.formatTime(selectedDuration);
+        input.blur();
+      }
+    });
+  }
+
   function renderHistory() {
     const allHistory = historyManager.getAll();
 
@@ -433,6 +490,9 @@
       selectPreset(minutes);
     });
   });
+
+  // Tap time display to edit custom duration
+  timeDisplay.addEventListener('click', enterEditMode);
 
   clearHistoryBtn.addEventListener('click', () => {
     if (confirm('Clear all history?')) {

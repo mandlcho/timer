@@ -129,6 +129,28 @@
       font-weight: 200;
       letter-spacing: 0.05em;
       font-variant-numeric: tabular-nums;
+      cursor: pointer;
+      transition: color 0s, opacity 0.2s;
+    }
+
+    .time-display:hover {
+      opacity: 0.8;
+    }
+
+    .time-edit {
+      font-size: 4.5rem;
+      font-weight: 200;
+      letter-spacing: 0.05em;
+      font-variant-numeric: tabular-nums;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid var(--accent);
+      color: var(--fg);
+      text-align: center;
+      width: 5ch;
+      outline: none;
+      font-family: inherit;
+      transition: color 0s, border-color 0s;
     }
 
     .time-presets {
